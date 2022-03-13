@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:icon="@drawable/home_ic"
+        android:id="@+id/home_nav"/>
+    <item android:title="Booking"
+        android:icon="@drawable/book_ic"
+        android:id="@+id/booking_nav"/>
+    <item android:title="My Account"
+        android:icon="@drawable/person_ic"
+        android:id="@+id/account_nav"/>
+    <item android:title="Setting"
+        android:icon="@drawable/setting_ic"
+        android:id="@+id/setting_nav"/>
+</menu>
