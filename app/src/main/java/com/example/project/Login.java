@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class Login extends AppCompatActivity {
     private EditText lPhoneEdt, lPassEdt ;
     private Button lLoginBtn ;
@@ -38,7 +40,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         lPhoneEdt = findViewById(R.id.lPhoneEdt) ;
         lPassEdt = findViewById(R.id.lPassEdt) ;
         lLoginBtn = findViewById(R.id.lLoginBtn) ;
@@ -77,6 +79,10 @@ public class Login extends AppCompatActivity {
                             SharedPreferences preferences = getSharedPreferences("isLogin",MODE_PRIVATE) ;
                             SharedPreferences.Editor editor = preferences.edit() ;
                             editor.putString("isLogin","true");
+                            editor.apply();
+                            preferences  = getSharedPreferences("CurrentUser",MODE_PRIVATE) ;
+                            editor = preferences.edit();
+                            editor.putString("CurrentUser",Common.currentUser.getPhone()) ;
                             editor.apply();
                             hideKeyboardFrom(Login.this,v);
                             Intent mainActivity = new Intent(Login.this,MainActivity.class) ;
