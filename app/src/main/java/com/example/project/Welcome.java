@@ -37,6 +37,7 @@ public class Welcome extends AppCompatActivity {
             public void onClick(View v) {
                 Intent login = new Intent(Welcome.this,Login.class) ;
                 startActivity(login);
+                finish();
             }
         });
         hSignupBtn.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +45,7 @@ public class Welcome extends AppCompatActivity {
             public void onClick(View v) {
                 Intent signup = new Intent(Welcome.this,Signup.class) ;
                 startActivity(signup);
+                finish();
             }
         });
     }

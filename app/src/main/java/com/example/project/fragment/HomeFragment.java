@@ -83,9 +83,10 @@ public class HomeFragment extends Fragment  {
         makeBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                replaceFragment(new MakeOrderFragment());
 //                replaceFragment(new MakeBookFragment());
-                Intent map = new Intent(getActivity(), MapsActivity.class) ;
-                startActivity(map);
+//                Intent map = new Intent(getActivity(), MapsActivity.class) ;
+//                startActivity(map);
             }
         });
 //        return inflater.inflate(R.layout.fragment_home, container, false);

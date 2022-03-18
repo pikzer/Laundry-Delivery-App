@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding ;
+    ActivityMinBinding binding ;
     private SharedPreferences preferences ;
     private String userKey ;
     private FirebaseDatabase database ;

@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class Login extends AppCompatActivity {
     private EditText lPhoneEdt, lPassEdt ;
-    private Button lLoginBtn ;
+    private Button lLoginBtn,lSignupBtn ;
     private FirebaseDatabase database ;
     private DatabaseReference mRef ;
 
@@ -44,7 +44,7 @@ public class Login extends AppCompatActivity {
         lPhoneEdt = findViewById(R.id.lPhoneEdt) ;
         lPassEdt = findViewById(R.id.lPassEdt) ;
         lLoginBtn = findViewById(R.id.lLoginBtn) ;
-
+        lSignupBtn = findViewById(R.id.lSignupBtn) ;
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference("User");
 
@@ -86,8 +86,8 @@ public class Login extends AppCompatActivity {
                             editor.apply();
                             hideKeyboardFrom(Login.this,v);
                             Intent mainActivity = new Intent(Login.this,MainActivity.class) ;
-                            startActivity(mainActivity);
                             finish();
+                            startActivity(mainActivity);
                         }
                         // Password Wrong
                         else{
@@ -104,5 +104,21 @@ public class Login extends AppCompatActivity {
                 });
             }
         });
+        lSignupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signup = new Intent(Login.this,Signup.class) ;
+                startActivity(signup);
+                finish();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent welcome = new Intent(Login.this,Welcome.class) ;
+        startActivity(welcome);
+        finish();
     }
 }

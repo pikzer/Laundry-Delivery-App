@@ -12,43 +12,51 @@
         android:id="@+id/imageView"
         android:layout_width="301dp"
         android:layout_height="446dp"
-        android:layout_marginStart="52dp"
         android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"
         app:srcCompat="@drawable/logo_temp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="182dp"
         android:layout_height="54dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="44dp"
         android:text="My Laundry"
         android:textAlignment="center"
         android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.735" />
 
     <Button
         android:id="@+id/hLoginBtn"
         android:layout_width="104dp"
         android:layout_height="58dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="60dp"
         android:text="Log in"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.737" />
 
     <Button
         android:id="@+id/hSignupBtn"
         android:layout_width="104dp"
         android:layout_height="58dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="60dp"
         android:text="Sign up"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.791"
         app:layout_constraintStart_toEndOf="@+id/hLoginBtn"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.737" />
 </androidx.constraintlayout.widget.ConstraintLayout>

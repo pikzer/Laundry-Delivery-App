@@ -12,75 +12,84 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="121dp"
-        android:layout_height="209dp"
-        android:layout_marginStart="132dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="107dp"
+        android:layout_height="178dp"
         android:src="@drawable/logo_temp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:text="Create Your Account"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.188"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <EditText
         android:id="@+id/sPassEdt"
         android:layout_width="286dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="116dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="32dp"
         android:background="@color/white"
         android:inputType="textPassword"
-        android:textSize="24sp"
 
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.288"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sNameEdt" />
+        app:layout_constraintTop_toBottomOf="@+id/sEmailEdt" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
         android:text="passsword"
         app:layout_constraintBottom_toTopOf="@+id/sPassEdt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.105"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
         android:text="Email"
         app:layout_constraintBottom_toTopOf="@+id/sEmailEdt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.095"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/sSignupBtn"
         android:layout_width="257dp"
         android:layout_height="51dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="44dp"
         android:text="Create Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.422"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sPassEdt" />
+        app:layout_constraintTop_toBottomOf="@+id/sPassEdt"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/sNameEdt"
         android:layout_width="286dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="51dp"
 
+        android:layout_marginTop="32dp"
         android:background="@color/white"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.288"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sPhoneEdt" />
 
@@ -88,45 +97,48 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="4dp"
         android:text="Name"
         app:layout_constraintBottom_toTopOf="@+id/sNameEdt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.096"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/sPhoneEdt"
         android:layout_width="286dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="80dp"
         android:background="@color/white"
         android:ems="10"
         android:inputType="phone"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.288"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
         android:inputType="phone"
         android:text="Phone Number"
         app:layout_constraintBottom_toTopOf="@+id/sPhoneEdt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.113"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/sEmailEdt"
         android:layout_width="286dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="28dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="32dp"
         android:background="@color/white"
         android:ems="10"
         android:inputType="textEmailAddress"
         android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.288"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sNameEdt" />
 
