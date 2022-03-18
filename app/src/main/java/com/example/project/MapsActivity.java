@@ -45,7 +45,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         // set Interval gps scan
@@ -58,6 +57,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.location_map);
         confirmBtn = findViewById(R.id.confirm_button) ;
         mapFragment.getMapAsync(this);
+        // data base
+        database = FirebaseDatabase.getInstance();
+        mRef = database.getReference("tempLocation");
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
             return;
@@ -118,8 +121,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Bundle b = new Bundle() ;
                     b.putStringArray("markLocation",new String[]{String.valueOf(currentLocation.latitude),
                     String.valueOf(currentLocation.longitude)});
+                    mRef.setValue(currentLocation) ;
                     finish();
-                    Log.i("xxx","save pin") ;
+
                 }
                 else {
                     Log.i("xxx","Not pin") ;
