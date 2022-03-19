@@ -1,10 +1,13 @@
 package com.example.project.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,7 +15,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.project.MapsActivity;
 import com.example.project.R;
+import com.example.project.model.Order;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,21 +44,23 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MakeOrderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnDateSetListener {
 
     View view ;
     private FirebaseDatabase database ;
     private DatabaseReference mRef ;
+
+    LatLng latlngFinal ;
+    Calendar pickUpTimeFinal ;
+    Calendar dropOffTimeFinal ;
 
     Geocoder geocoder ;
 
@@ -113,9 +122,12 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
         ImageButton openMapBtn = view.findViewById(R.id.openMapBtn) ;
         ImageButton pickUpDate = view.findViewById(R.id.pickUpDate) ;
         ImageButton pickUpTime = view.findViewById(R.id.pickUpTimeButton) ;
+        Button makeOrderBtn = view.findViewById(R.id.makeOrderBtn) ;
         geocoder = new Geocoder(getActivity(), Locale.getDefault()) ;
 //        String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
+        pickUpTimeFinal = Calendar.getInstance() ;
+        dropOffTimeFinal = Calendar.getInstance() ;
 
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference("tempLocation");
@@ -127,6 +139,7 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                     LatLng latLng = new LatLng(snapshot.child("latitude").getValue(Double.class),snapshot.child("longitude").getValue(Double.class)) ;
                     try {
                         addressResult = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1) ;
+                        latlngFinal = latLng ;
                         addressEdt.setText(addressResult.get(0).getAddressLine(0));
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -341,6 +354,57 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                 dialog.dismiss();
             }
         });
+
+        makeOrderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!addressEdt.getText().toString().equals("") && !pickUpDateEdt.getText().toString().equals("")
+                && !pickUpTimeEdt.getText().toString().equals("") && !dropOffDateEdt.getText().toString().equals("")
+                && !dropOffTimeEdt.getText().toString().equals("") && !serviceEdt.getText().toString().equals("")){
+                    SharedPreferences preferences  = getActivity().getSharedPreferences("CurrentUser", Context.MODE_PRIVATE);
+                    String userKey = preferences.getString("CurrentUser","") ;
+                    FirebaseDatabase firebaseOrder = FirebaseDatabase.getInstance();
+                    DatabaseReference orderDbRef = firebaseOrder.getReference("Order");
+                    if(latlngFinal!=null){
+                        Order order = new Order(userKey,String.valueOf(Order.gen()),latlngFinal,addressEdt.getText().toString(),
+                                pickUpDateEdt.getText().toString(),pickUpTimeEdt.getText().toString(),
+                                dropOffDateEdt.getText().toString(),dropOffTimeEdt.getText().toString(),serviceEdt.getText().toString()) ;
+//                        orderDbRef.child(order.getOrderNo()).setValue(order) ;
+                        orderDbRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.child(order.getOrderNo()).exists()){
+                                    Toast.makeText(getActivity(),"Something wrong please try again!",Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+                                    alertDialog.setTitle("Confirm your pick up order");
+                                    alertDialog.setMessage("Are you sure to make pick up order?");
+                                    alertDialog.setIcon(R.drawable.ic_baseline_done_24);
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            orderDbRef.child(order.getOrderNo()).setValue(order) ;
+                                            replaceFragment(new BookingFragment());
+                                            Toast.makeText(getActivity(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    alertDialog.show();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                }
+            }
+        });
         return view ;
     }
 
@@ -358,5 +422,10 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
     }
-
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager() ;
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout,fragment).addToBackStack("HomeFragment") ;
+        fragmentTransaction.commit();
+    }
 }
