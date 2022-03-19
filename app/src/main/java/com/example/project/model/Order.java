@@ -15,11 +15,12 @@ public class Order {
     String dropOffDate ;
     String dropOffTime ;
     String service ;
+    String status ;
 
     public Order() {
     }
 
-    public Order(String userKey, String orderNo, LatLng pickupLocation, String locationDetail, String pickUpDate, String pickUpTime, String dropOffDate, String dropOffTime, String service) {
+    public Order(String userKey, String orderNo, LatLng pickupLocation, String locationDetail, String pickUpDate, String pickUpTime, String dropOffDate, String dropOffTime, String service,String status) {
         this.userKey = userKey;
         this.orderNo = orderNo;
         this.pickupLocation = pickupLocation;
@@ -29,6 +30,7 @@ public class Order {
         this.dropOffDate = dropOffDate;
         this.dropOffTime = dropOffTime;
         this.service = service;
+        this.status = status ;
     }
 
     public static int gen() {
@@ -106,6 +108,14 @@ public class Order {
 
     public void setService(String service) {
         this.service = service;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

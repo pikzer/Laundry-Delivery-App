@@ -366,14 +366,12 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                     FirebaseDatabase firebaseOrder = FirebaseDatabase.getInstance();
                     DatabaseReference orderDbRef = firebaseOrder.getReference("Order");
                     if(latlngFinal!=null){
-                        Order order = new Order(userKey,String.valueOf(Order.gen()),latlngFinal,addressEdt.getText().toString(),
-                                pickUpDateEdt.getText().toString(),pickUpTimeEdt.getText().toString(),
-                                dropOffDateEdt.getText().toString(),dropOffTimeEdt.getText().toString(),serviceEdt.getText().toString()) ;
+                         int id = Order.gen() ;
 //                        orderDbRef.child(order.getOrderNo()).setValue(order) ;
                         orderDbRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.child(order.getOrderNo()).exists()){
+                                if(snapshot.child(String.valueOf(id)).exists()){
                                     Toast.makeText(getActivity(),"Something wrong please try again!",Toast.LENGTH_SHORT).show();
                                 }
                                 else{
@@ -383,9 +381,14 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                                     alertDialog.setIcon(R.drawable.ic_baseline_done_24);
                                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
+                                            Order order = new Order(userKey,String.valueOf(id),latlngFinal,addressEdt.getText().toString(),
+                                                    pickUpDateEdt.getText().toString(),pickUpTimeEdt.getText().toString(),
+                                                    dropOffDateEdt.getText().toString(),dropOffTimeEdt.getText().toString(),serviceEdt.getText().toString(),
+                                                    "Waiting for pick up") ;
                                             orderDbRef.child(order.getOrderNo()).setValue(order) ;
                                             replaceFragment(new BookingFragment());
-                                            Toast.makeText(getActivity(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                                            getActivity().getFragmentManager().popBackStack();
+                                            Toast.makeText(getActivity(), "Your order has been add", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
