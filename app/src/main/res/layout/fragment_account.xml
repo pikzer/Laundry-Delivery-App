@@ -17,9 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="229dp"
             android:background="@color/light_gray"
+            tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="-2dp"
-            tools:layout_editor_absoluteY="-1dp"
-            tools:ignore="MissingConstraints">
+            tools:layout_editor_absoluteY="-1dp">
 
 
             <ImageView
@@ -85,24 +85,12 @@
             app:layout_constraintStart_toEndOf="@+id/editProfileBtn"
             app:layout_constraintTop_toBottomOf="@+id/aNewPassEdt" />
 
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="156dp"
-            android:layout_marginTop="12dp"
-            android:text="Edit Profile"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
         <EditText
             android:id="@+id/aNameEdt"
             android:layout_width="274dp"
             android:layout_height="48dp"
             android:layout_marginStart="36dp"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="32dp"
             android:background="@color/white"
             android:ems="10"
             android:inputType="textPersonName"
@@ -114,6 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
+            android:layout_marginBottom="4dp"
             android:text="Name/Username"
             app:layout_constraintBottom_toTopOf="@+id/aNameEdt"
             app:layout_constraintStart_toStartOf="parent" />
@@ -146,8 +135,8 @@
             android:layout_marginStart="36dp"
             android:layout_marginTop="24dp"
             android:background="@color/white"
-            android:focusable="false"
             android:ems="10"
+            android:focusable="false"
             android:inputType="phone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/aEmailEdt" />

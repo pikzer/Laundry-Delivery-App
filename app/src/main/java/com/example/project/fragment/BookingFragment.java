@@ -16,17 +16,24 @@ import com.example.project.R;
 import com.example.project.adapter.Adapter;
 import com.example.project.model.Order;
 import com.example.project.model.OrderRecycle;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,7 +98,8 @@ public class BookingFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference("Order");
         initData();
-        initRecyclerview() ;
+//        initRecyclerview() ;
+        Log.i("xxx",orderRecycleList.toString()) ;
         return view ;
 
     }
@@ -100,34 +108,66 @@ public class BookingFragment extends Fragment {
 
     public void initData(){
         orderRecycleList = new ArrayList<>();
-//        List<Order> orders = new ArrayList<>() ;
-        orderRecycleList.add(new OrderRecycle("00000","Ironing","Pick up at",
-                "22/22/22 11:44","In progress",R.drawable.book_ic)) ;
-        orderRecycleList.add(new OrderRecycle("00001","Full-Service","Drop off at",
-                "22/22/22 11:44","Waiting for pick up",R.drawable.ic_baseline_calendar_today_24)) ;
-        orderRecycleList.add(new OrderRecycle("00002","Ironing","Pick up at",
-                "22/22/22 11:44","Waiting for drop off",R.drawable.ic_baseline_add_location_24)) ;
-        orderRecycleList.add(new OrderRecycle("00002","Ironing","Pick up at",
-                "22/22/22 11:44","Done",R.drawable.ic_baseline_push_pin_24)) ;
-//        mRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+//        for(int i = 0 ; i < 5 ; i++){
+//            orderRecycleList.add(new OrderRecycle("00000","Ironing","Pick up at",
+//                    "22/22/22 11:44","In progress",R.drawable.book_ic)) ;
+//            orderRecycleList.add(new OrderRecycle("00001","Full-Service","Drop off at",
+//                    "22/22/22 11:44","pick up",R.drawable.ic_baseline_calendar_today_24)) ;
+//            orderRecycleList.add(new OrderRecycle("00002","Ironing","Pick up at",
+//                    "22/22/22 11:44","Drop off",R.drawable.ic_baseline_add_location_24)) ;
+//            orderRecycleList.add(new OrderRecycle("00002","Ironing","Pick up at",
+//                    "22/22/22 11:44","Done",R.drawable.ic_baseline_push_pin_24)) ;
+//        }
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<String> c = new ArrayList<>() ;
+                ArrayList<OrderRecycle> o = new ArrayList<>() ;
+                int i = 0 ;
+                for (DataSnapshot s:snapshot.getChildren()) {
+                    for (DataSnapshot a :s.getChildren()){
+                        c.add(a.getValue().toString()) ;
+                    }
+                    int ph = 0 ;
+                    String a="" ;
+                    if(c.get(8).equals("pick up")){
+                        a = "pick up at:" ;
+                        ph = R.drawable.pickup_ic ;
+                    }
+                    else if(c.get(8).equals("drop off")){
+                        a = "drop of at:" ;
+                        ph = R.drawable.dropoff_ic ;
+                    }
+                    else if(c.get(8).equals("in progress")){
+                        a = c.get(7+i) + "in progress" ;
+                        ph = R.drawable.inprogress_ic ;
+                    }
+                    else if(c.get(8).equals("done")){
+                        a = "done" ;
+                        ph = R.drawable.done_ic ;
+                    }
+                    else{
+                        ph = R.mipmap.ic_launcher ;
+                    }
+                    o.add(new OrderRecycle(c.get(3+i),c.get(7+i),a,
+                            c.get(4+i)+" "+c.get(5+i),c.get(8+i),ph)) ;
+                    i+=10 ;
+                }
+                initRecyclerview(o);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
-    public void initRecyclerview(){
+    public void initRecyclerview(ArrayList<OrderRecycle> orderRecycles){
         recyclerView = view.findViewById(R.id.recycleView) ;
         layoutManager = new LinearLayoutManager(getActivity()) ;
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new Adapter(orderRecycleList );
+        adapter = new Adapter(orderRecycles);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

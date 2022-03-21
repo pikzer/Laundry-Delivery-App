@@ -124,6 +124,7 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
         ImageButton pickUpTime = view.findViewById(R.id.pickUpTimeButton) ;
         Button makeOrderBtn = view.findViewById(R.id.makeOrderBtn) ;
         geocoder = new Geocoder(getActivity(), Locale.getDefault()) ;
+
 //        String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
         pickUpTimeFinal = Calendar.getInstance() ;
@@ -161,14 +162,7 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
         });
         //
         final Calendar newCalendar = Calendar.getInstance();
-        final DatePickerDialog  pickUpDateDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                pickUpDateEdt.setText(dateFormatter.format(newDate.getTime()));
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        final boolean[] isSelectDate = {false};
         final DatePickerDialog  dropOffDateDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -177,19 +171,34 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                 dropOffDateEdt.setText(dateFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        final DatePickerDialog  pickUpDateDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                DateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                pickUpDateEdt.setText(dateFormatter.format(newDate.getTime()));
+                // 1 day service is default
+                isSelectDate[0] = true ;
+                Calendar nextDay = newDate ;
+                nextDay.add(Calendar.DAY_OF_WEEK,+1);
+                dropOffDateDialog.getDatePicker().setMinDate(nextDay.getTimeInMillis());
+
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
         // set Min Calendar
         pickUpDateDialog.getDatePicker().setMinDate(newCalendar.getTimeInMillis());
-        // 1 day service is default
-        Calendar nextDay = Calendar.getInstance() ;
-        nextDay.add(Calendar.HOUR_OF_DAY,+2);
-        dropOffDateDialog.getDatePicker().setMinDate(nextDay.getTimeInMillis());
+//        // 1 day service is default
+//        Calendar nextDay = Calendar.getInstance() ;
+//        nextDay.add(Calendar.HOUR_OF_DAY,+2);
+//        dropOffDateDialog.getDatePicker().setMinDate(nextDay.getTimeInMillis());
         // set Max Calendar (Max service is 30 day)
         Calendar nextMonth = Calendar.getInstance() ;
         nextMonth.add(Calendar.MONTH,+1);
         pickUpDateDialog.getDatePicker().setMaxDate(nextMonth.getTimeInMillis());
         nextMonth.add(Calendar.HOUR_OF_DAY,+1);
         dropOffDateDialog.getDatePicker().setMaxDate(nextMonth.getTimeInMillis());
-
         final TimePickerDialog pickUpTimeDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -275,7 +284,12 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
         dropOffDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dropOffDateDialog.show();
+                if(!isSelectDate[0]){
+                    Toast.makeText(getActivity(),"Please select pick up date",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    dropOffDateDialog.show();
+                }
             }
         });
         dropOffTimeBtn.setOnClickListener(new View.OnClickListener() {
@@ -301,11 +315,10 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if(isSelectService == true){
-
+                if(isSelectService){
+                    dialog.dismiss();
                 }
                 else{
-                    onSelectServiceClear();
                     serviceEdt.setText("");
                 }
             }
@@ -384,7 +397,7 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                                             Order order = new Order(userKey,String.valueOf(id),latlngFinal,addressEdt.getText().toString(),
                                                     pickUpDateEdt.getText().toString(),pickUpTimeEdt.getText().toString(),
                                                     dropOffDateEdt.getText().toString(),dropOffTimeEdt.getText().toString(),serviceEdt.getText().toString(),
-                                                    "Waiting for pick up") ;
+                                                    "pick up") ;
                                             orderDbRef.child(order.getOrderNo()).setValue(order) ;
                                             replaceFragment(new BookingFragment());
                                             getActivity().getFragmentManager().popBackStack();
@@ -425,6 +438,9 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
     }
+
+
+
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager() ;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

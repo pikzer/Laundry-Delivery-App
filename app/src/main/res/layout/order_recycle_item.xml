@@ -18,11 +18,11 @@
 
     <TextView
         android:id="@+id/orderNumTV"
-        android:layout_width="wrap_content"
+        android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="266dp"
+        android:layout_marginEnd="96dp"
         android:text="#FFFFF"
         android:textSize="15sp" />
 
@@ -37,11 +37,11 @@
 
     <TextView
         android:id="@+id/service_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="251dp"
+        android:layout_marginEnd="96dp"
         android:text="service_tv"
         android:textSize="15sp" />
 
@@ -56,11 +56,11 @@
 
     <TextView
         android:id="@+id/droporPickTime"
-        android:layout_width="wrap_content"
+        android:layout_width="221dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="55dp"
-        android:layout_marginEnd="219dp"
+        android:layout_marginEnd="96dp"
         android:text="22/22/22 11:11" />
 
     <androidx.cardview.widget.CardView
@@ -83,11 +83,11 @@
 
     <TextView
         android:id="@+id/statusNow_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="87dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="55dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="2dp"
         android:text="status-now"
         android:textAlignment="center"
         android:textSize="12sp" />
