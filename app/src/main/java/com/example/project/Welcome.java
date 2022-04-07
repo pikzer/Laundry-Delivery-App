@@ -31,6 +31,12 @@ public class Welcome extends AppCompatActivity {
             startActivity(mainActivity);
             finish();
         }
+        else if(isLogin.equals("adminMode")){
+            Intent dashboard = new Intent(Welcome.this,Dashboard.class) ;
+            startActivity(dashboard);
+            finish();
+        }
+
 
         hLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

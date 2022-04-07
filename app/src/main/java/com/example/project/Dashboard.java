@@ -1,22 +1,19 @@
-package com.example.project.fragment;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
+package com.example.project;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.project.EditOrderDashboard;
-import com.example.project.R;
 import com.example.project.adapter.Adapter;
+import com.example.project.common.Common;
 import com.example.project.model.OrderRecycle;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,91 +25,45 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BookingFragment extends Fragment implements Adapter.OnNoteListener {
-    View view ;
-    SharedPreferences sharedPreferences ;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class Dashboard extends AppCompatActivity implements Adapter.OnNoteListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public BookingFragment() {
-        // Required empty public constructor
-    }
-    ArrayList<OrderRecycle> orderRecycleArrayList ;
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BookingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BookingFragment newInstance(String param1, String param2) {
-        BookingFragment fragment = new BookingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
     RecyclerView recyclerView ;
     Adapter adapter ;
     LinearLayoutManager layoutManager ;
-    List<OrderRecycle> orderRecycleList ;
+    ArrayList<OrderRecycle> orderRecycleList ;
     FirebaseDatabase database;
     DatabaseReference mRef ;
-    String currentUser ;
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_booking, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference("Order");
-        initData();
-        Bundle bundle = getArguments() ;
-        if(bundle != null){
-            currentUser = bundle.getString("currentuser");
-        }
-
-//        Log.i("xxx",currentUser) ;
-        return view ;
-
+        getSupportActionBar().hide();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dashboard);
+        intiData() ;
     }
 
-    public void initData(){
-        orderRecycleList = new ArrayList<>();
+    public void onclk(View view){
+        SharedPreferences preferences = getSharedPreferences("isLogin", Context.MODE_PRIVATE);
+        Common.currentUser = null;
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("isLogin", "false");
+        editor.apply();
+        finish();
+        Intent intent = new Intent(Dashboard.this, Welcome.class);
+        startActivity(intent);
+    }
+
+    public void intiData(){
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<String> c = new ArrayList<>() ;
                 ArrayList<OrderRecycle> o = new ArrayList<>() ;
                 int i = 0 ;
-
                 for (DataSnapshot s:snapshot.getChildren()) {
-                    if(!s.child("userKey").getValue().toString().equals(currentUser)){
-                        continue;
-                    }
                     for (DataSnapshot a :s.getChildren()){
                         c.add(a.getValue().toString()) ;
                     }
@@ -160,32 +111,22 @@ public class BookingFragment extends Fragment implements Adapter.OnNoteListener 
             }
         });
     }
-
     public void initRecyclerview(ArrayList<OrderRecycle> orderRecycles){
         Collections.reverse(orderRecycles);
-        orderRecycleArrayList = orderRecycles ;
-        recyclerView = view.findViewById(R.id.recycleView) ;
-        layoutManager = new LinearLayoutManager(getActivity()) ;
+        orderRecycleList = orderRecycles ;
+        recyclerView = findViewById(R.id.recycleView2) ;
+        layoutManager = new LinearLayoutManager(this) ;
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new Adapter(orderRecycles, this);
+        adapter = new Adapter(orderRecycles,this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
-
-//    public ArrayList<OrderRecycle> sortByDate(ArrayList<OrderRecycle> orderRecycleList){
-//
-//    }
-
-
-
-
     @Override
     public void onNoteClick(int pos) {
-        Intent orderDashBoard = new Intent(getActivity(), com.example.project.OrderCustomerInfo.class);
-        orderDashBoard.putExtra("orderKey",orderRecycleArrayList.get(pos).getOrderNumTV()) ;
-        Log.i("xxx",orderRecycleArrayList.get(pos).getOrderNumTV());
-        startActivity(orderDashBoard);
+        Intent EditOrderDashboard = new Intent(this, EditOrderDashboard.class);
+        EditOrderDashboard.putExtra("orderKey",orderRecycleList.get(pos).getOrderNumTV()) ;
+        startActivity(EditOrderDashboard);
     }
 }

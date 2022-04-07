@@ -70,7 +70,11 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new HomeFragment());
                     break;
                 case R.id.booking_nav:
-                    replaceFragment(new BookingFragment());
+                    Bundle bundle = new Bundle() ;
+                    bundle.putString("currentuser",userObj.getPhone());
+                    BookingFragment bookingFragment = new BookingFragment() ;
+                    bookingFragment.setArguments(bundle);
+                    replaceFragment(bookingFragment);
                     break;
                 case R.id.account_nav:
                     Bundle b = new Bundle() ;

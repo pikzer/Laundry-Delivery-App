@@ -23,6 +23,7 @@ import com.example.project.MapsActivity;
 import com.example.project.R;
 
 import java.io.File;
+import java.net.URI;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,13 +81,25 @@ public class HomeFragment extends Fragment  {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         // Inflate the layout for this fragment
         ImageButton makeBookBtn = view.findViewById(R.id.makeBookBtn) ;
+        ImageButton contactBtn = view.findViewById(R.id.contactUsBtn) ;
         makeBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 replaceFragment(new MakeOrderFragment());
-//                replaceFragment(new MakeBookFragment());
-//                Intent map = new Intent(getActivity(), MapsActivity.class) ;
-//                startActivity(map);
+            }
+        });
+        contactBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                String pars = "google.navigation:q=" + (order.getPickupLocation().latitude)+
+//                        ","+ order.getPickupLocation().longitude +"&mode=d" ;
+//                Intent navActivity = new Intent(Intent.ACTION_VIEW, Uri.parse(pars)) ;
+//                navActivity.setPackage("com.google.android.apps.maps") ;
+//                if(navActivity.resolveActivity(getPackageManager())!= null){
+//                    startActivity(navActivity);
+//                }
+                Intent lineIntent  = new Intent(Intent.ACTION_VIEW, Uri.parse("http://line.me/ti/p/~kajitich"));
+                startActivity(lineIntent);
             }
         });
 //        return inflater.inflate(R.layout.fragment_home, container, false);

@@ -2,10 +2,11 @@ package com.example.project.model;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Random;
 
-public class Order {
+public class Order implements Serializable {
     String userKey ;
     String orderNo ;
     LatLng pickupLocation;

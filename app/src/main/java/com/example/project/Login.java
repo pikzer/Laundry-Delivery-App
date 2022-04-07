@@ -76,18 +76,30 @@ public class Login extends AppCompatActivity {
                             Common.currentUser = new User(snapshot.child(ph+"/name").getValue().toString(),
                                     snapshot.child(ph+"/email").getValue().toString(),ph) ;
                             // TO DEL
-                            SharedPreferences preferences = getSharedPreferences("isLogin",MODE_PRIVATE) ;
-                            SharedPreferences.Editor editor = preferences.edit() ;
-                            editor.putString("isLogin","true");
-                            editor.apply();
-                            preferences  = getSharedPreferences("CurrentUser",MODE_PRIVATE) ;
-                            editor = preferences.edit();
-                            editor.putString("CurrentUser",Common.currentUser.getPhone()) ;
-                            editor.apply();
+                            SharedPreferences preferences1 = getSharedPreferences("isLogin",MODE_PRIVATE) ;
+                            SharedPreferences.Editor editor1 = preferences1.edit() ;
+                            SharedPreferences preferences2  = getSharedPreferences("CurrentUser",MODE_PRIVATE) ;
+                            SharedPreferences.Editor editor2 = preferences2.edit() ;
                             hideKeyboardFrom(Login.this,v);
-                            Intent mainActivity = new Intent(Login.this,MainActivity.class) ;
-                            finish();
-                            startActivity(mainActivity);
+
+                            if(ph.equals("12") && pas.equals("admin")){
+                                editor1.putString("isLogin","adminMode");
+                                editor1.apply();
+                                editor2.putString("CurrentUser",Common.currentUser.getPhone()) ;
+                                editor2.apply();
+                                Intent dashboard = new Intent(Login.this,Dashboard.class) ;
+                                finish();
+                                startActivity(dashboard);
+                            }
+                            else{
+                                editor1.putString("isLogin","true");
+                                editor1.apply();
+                                editor2.putString("CurrentUser",Common.currentUser.getPhone()) ;
+                                editor2.apply();
+                                Intent mainActivity = new Intent(Login.this,MainActivity.class) ;
+                                finish();
+                                startActivity(mainActivity);
+                            }
                         }
                         // Password Wrong
                         else{

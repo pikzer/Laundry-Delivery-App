@@ -38,12 +38,12 @@
             android:id="@+id/makeBookBtn"
             android:layout_width="115dp"
             android:layout_height="112dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/round_botton"
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_add_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.129"
+            app:layout_constraintHorizontal_bias="0.172"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
@@ -57,6 +57,64 @@
             app:layout_constraintEnd_toEndOf="@+id/makeBookBtn"
             app:layout_constraintStart_toStartOf="@+id/makeBookBtn"
             app:layout_constraintTop_toBottomOf="@+id/makeBookBtn" />
+
+        <TextView
+            android:id="@+id/textView42"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Booking"
+
+            app:layout_constraintEnd_toEndOf="@+id/makeBookBtn"
+            app:layout_constraintStart_toStartOf="@+id/makeBookBtn"
+            app:layout_constraintTop_toBottomOf="@+id/makeBookBtn" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="115dp"
+            android:layout_height="112dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="112dp"
+            android:background="@drawable/round_botton"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_info_24"
+            app:layout_constraintStart_toEndOf="@+id/makeBookBtn"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/textView45"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:text="Service Info"
+            app:layout_constraintEnd_toEndOf="@+id/imageButton2"
+            app:layout_constraintHorizontal_bias="0.536"
+            app:layout_constraintStart_toStartOf="@+id/imageButton2"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+
+        <ImageButton
+            android:id="@+id/contactUsBtn"
+            android:layout_width="115dp"
+            android:layout_height="112dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="84dp"
+
+            android:background="@drawable/round_botton"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_baseline_contacts_24"
+            app:layout_constraintStart_toEndOf="@+id/makeBookBtn"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Contact us"
+            app:layout_constraintEnd_toEndOf="@+id/contactUsBtn"
+            app:layout_constraintStart_toStartOf="@+id/contactUsBtn"
+            app:layout_constraintTop_toBottomOf="@+id/contactUsBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

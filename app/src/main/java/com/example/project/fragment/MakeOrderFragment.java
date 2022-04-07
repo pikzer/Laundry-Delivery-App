@@ -111,6 +111,7 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_make_order, container, false);
+        orderNumberGen() ;
         EditText addressEdt = view.findViewById(R.id.addressEdt) ;
         EditText pickUpDateEdt = view.findViewById(R.id.pickUpDateEdt) ;
         EditText pickUpTimeEdt = view.findViewById(R.id.pickUpTimeEdt) ;
@@ -137,7 +138,8 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Address> addressResult ;
                 if(snapshot.getValue() != null){
-                    LatLng latLng = new LatLng(snapshot.child("latitude").getValue(Double.class),snapshot.child("longitude").getValue(Double.class)) ;
+                    LatLng latLng = new LatLng(snapshot.child("latitude").getValue(Double.class),
+                            snapshot.child("longitude").getValue(Double.class)) ;
                     try {
                         addressResult = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1) ;
                         latlngFinal = latLng ;
@@ -379,27 +381,24 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                     FirebaseDatabase firebaseOrder = FirebaseDatabase.getInstance();
                     DatabaseReference orderDbRef = firebaseOrder.getReference("Order");
                     if(latlngFinal!=null){
-                         int id = Order.gen() ;
-//                        orderDbRef.child(order.getOrderNo()).setValue(order) ;
-                        orderDbRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.child(String.valueOf(id)).exists()){
-                                    Toast.makeText(getActivity(),"Something wrong please try again!",Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+//                         int id = Order.gen() ;
+                        orderNumberGen();
+                        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                                     alertDialog.setTitle("Confirm your pick up order");
                                     alertDialog.setMessage("Are you sure to make pick up order?");
                                     alertDialog.setIcon(R.drawable.ic_baseline_done_24);
                                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Order order = new Order(userKey,String.valueOf(id),latlngFinal,addressEdt.getText().toString(),
+                                            Order order = new Order(userKey,idd,latlngFinal,addressEdt.getText().toString(),
                                                     pickUpDateEdt.getText().toString(),pickUpTimeEdt.getText().toString(),
                                                     dropOffDateEdt.getText().toString(),dropOffTimeEdt.getText().toString(),serviceEdt.getText().toString(),
                                                     "pick up") ;
                                             orderDbRef.child(order.getOrderNo()).setValue(order) ;
-                                            replaceFragment(new BookingFragment());
+                                            Bundle bundle = new Bundle() ;
+                                            bundle.putString("currentuser",userKey);
+                                            BookingFragment bookingFragment = new BookingFragment() ;
+                                            bookingFragment.setArguments(bundle);
+                                            replaceFragment(bookingFragment);
                                             getActivity().getFragmentManager().popBackStack();
                                             Toast.makeText(getActivity(), "Your order has been add", Toast.LENGTH_SHORT).show();
                                         }
@@ -410,14 +409,52 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                                         }
                                     });
                                     alertDialog.show();
-                                }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
+//                        orderDbRef.child(order.
+//                        getOrderNo()).setValue(order) ;
+//                        orderDbRef.addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                if(snapshot.child(idd).exists()){
+//                                    Toast.makeText(getActivity(),"Something wrong please try again!",Toast.LENGTH_SHORT).show();
+//                                }
+//                                else{
+//                                    AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+//                                    alertDialog.setTitle("Confirm your pick up order");
+//                                    alertDialog.setMessage("Are you sure to make pick up order?");
+//                                    alertDialog.setIcon(R.drawable.ic_baseline_done_24);
+//                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            Order order = new Order(userKey,idd,latlngFinal,addressEdt.getText().toString(),
+//                                                    pickUpDateEdt.getText().toString(),pickUpTimeEdt.getText().toString(),
+//                                                    dropOffDateEdt.getText().toString(),dropOffTimeEdt.getText().toString(),serviceEdt.getText().toString(),
+//                                                    "pick up") ;
+//                                            orderDbRef.child(order.getOrderNo()).setValue(order) ;
+//                                            Bundle bundle = new Bundle() ;
+//                                            bundle.putString("currentuser",userKey);
+//                                            BookingFragment bookingFragment = new BookingFragment() ;
+//                                            bookingFragment.setArguments(bundle);
+//                                            replaceFragment(bookingFragment);
+//                                            getActivity().getFragmentManager().popBackStack();
+//                                            Toast.makeText(getActivity(), "Your order has been add", Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    });
+//                                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+//                                        public void onClick(DialogInterface dialog, int which) {
+//                                            alertDialog.dismiss();
+//                                        }
+//                                    });
+//
+//                                }
+//                            }
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
                     }
+                }
+                else{
+                    Toast.makeText(getActivity(),"Pleas insert all information!",Toast.LENGTH_SHORT).show() ;
                 }
             }
         });
@@ -439,6 +476,30 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
 
     }
 
+    public void orderNumberGen(){
+        FirebaseDatabase db ;
+        DatabaseReference dbRef;
+        db = FirebaseDatabase.getInstance();
+        dbRef = db.getReference("Order");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String s = String.format("%05d",snapshot.getChildrenCount()) ;
+                getOrderNum(s) ;
+//                Log.i("xxx",String.valueOf(snapshot.getChildrenCount())) ;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+    String idd ;
+    public void getOrderNum(String s){
+        idd = s ;
+    }
 
 
     private void replaceFragment(Fragment fragment){
