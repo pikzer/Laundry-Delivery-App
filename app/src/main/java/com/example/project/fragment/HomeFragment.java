@@ -1,11 +1,14 @@
 package com.example.project.fragment;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,17 +16,10 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import com.example.project.Login;
-import com.example.project.MainActivity;
-import com.example.project.MapsActivity;
 import com.example.project.R;
-
-import java.io.File;
-import java.net.URI;
+import com.example.project.ServiceInfoActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +29,7 @@ import java.net.URI;
 public class HomeFragment extends Fragment  {
 
     public View view ;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,7 +71,7 @@ public class HomeFragment extends Fragment  {
         }
     }
 
-
+    int i = 1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,6 +79,8 @@ public class HomeFragment extends Fragment  {
         // Inflate the layout for this fragment
         ImageButton makeBookBtn = view.findViewById(R.id.makeBookBtn) ;
         ImageButton contactBtn = view.findViewById(R.id.contactUsBtn) ;
+        ImageButton serviceInfoBtn = view.findViewById(R.id.serviceInfoBtn) ;
+        ImageButton allbookingBtn = view.findViewById(R.id.allbookingBtn) ;
         makeBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,15 +90,27 @@ public class HomeFragment extends Fragment  {
         contactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String pars = "google.navigation:q=" + (order.getPickupLocation().latitude)+
-//                        ","+ order.getPickupLocation().longitude +"&mode=d" ;
-//                Intent navActivity = new Intent(Intent.ACTION_VIEW, Uri.parse(pars)) ;
-//                navActivity.setPackage("com.google.android.apps.maps") ;
-//                if(navActivity.resolveActivity(getPackageManager())!= null){
-//                    startActivity(navActivity);
-//                }
                 Intent lineIntent  = new Intent(Intent.ACTION_VIEW, Uri.parse("http://line.me/ti/p/~kajitich"));
                 startActivity(lineIntent);
+            }
+        });
+        serviceInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ServiceInfoActivity.class) ;
+                startActivity(intent);
+            }
+        });
+        allbookingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = getArguments() ;
+                if(bundle != null){
+                    BookingFragment bookingFragment = new BookingFragment() ;
+                    bookingFragment.setArguments(bundle);
+                    replaceFragment(bookingFragment);
+                }
+//                replaceFragment(new HomeFragment());
             }
         });
 //        return inflater.inflate(R.layout.fragment_home, container, false);
@@ -111,6 +122,13 @@ public class HomeFragment extends Fragment  {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout,fragment).addToBackStack("HomeFragment") ;
         fragmentTransaction.commit();
+
     }
+
+
+
+
+
+
 
 }

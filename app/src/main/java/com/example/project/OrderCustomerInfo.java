@@ -6,11 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.project.model.Order;
 import com.example.project.utility.ImgFilter;
@@ -112,24 +116,29 @@ public class OrderCustomerInfo extends AppCompatActivity {
         cancelInfoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(OrderCustomerInfo.this).create();
-                alertDialog.setTitle("Confirm to cancel order");
-                alertDialog.setMessage("Are you sure to cancel order?");
-                alertDialog.setIcon(R.drawable.ic_baseline_cancel_24);
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mRef.child(order.getOrderNo()+"/status").setValue("Canceled") ;
-                        finish();
-                    }
-                });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.dismiss();
-                    }
-                });
-                alertDialog.show();
+                if(doneTV.getText().toString().equals("Canceled")){
+                    Toast.makeText(OrderCustomerInfo.this, "This order has been canceled.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    AlertDialog alertDialog = new AlertDialog.Builder(OrderCustomerInfo.this).create();
+                    alertDialog.setTitle("Confirm to cancel order");
+                    alertDialog.setMessage("Are you sure to cancel order?");
+                    alertDialog.setIcon(R.drawable.ic_baseline_cancel_24);
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mRef.child(order.getOrderNo()+"/status").setValue("Canceled") ;
+                            finish();
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                }
             }
         });
         if (order.getStatus().equals("pick up")) {
@@ -152,10 +161,43 @@ public class OrderCustomerInfo extends AppCompatActivity {
             ImgFilter.grayscaleFilter(dropoffImg);
             ImgFilter.grayscaleFilter(pickupImg);
             ImgFilter.grayscaleFilter(inprogressImg);
+            doneTV.setText("Canceled");
+            cancelInfoBtn.setBackgroundColor(Color.GRAY);
             int ph = 0 ;
             ph = R.drawable.ic_baseline_cancel_24 ;
             doneImg.setImageResource(ph);
         }
+        addressDetailTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String uri = "geo:" ;
+                uri += String.valueOf(order.getPickupLocation().latitude) ;
+                uri += ",";
+                uri += String.valueOf(order.getPickupLocation().longitude) ;
+                uri += "?q=" + order.getLocationDetail() ;
+                Uri gmmIntentUri = Uri.parse(uri);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
+        addressDetail2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String uri = "geo:" ;
+                uri += String.valueOf(order.getPickupLocation().latitude) ;
+                uri += ",";
+                uri += String.valueOf(order.getPickupLocation().longitude) ;
+                Uri gmmIntentUri = Uri.parse(uri);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
 
     }
 }

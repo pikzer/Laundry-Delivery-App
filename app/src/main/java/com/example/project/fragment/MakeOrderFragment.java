@@ -3,6 +3,8 @@ package com.example.project.fragment;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,9 +13,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -107,6 +112,7 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
 
     ImageView full,washfold,washiron,dry,iron,duvet ;
     boolean isSelectService = false ;
+    int i = 1 ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -401,6 +407,23 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                                             replaceFragment(bookingFragment);
                                             getActivity().getFragmentManager().popBackStack();
                                             Toast.makeText(getActivity(), "Your order has been add", Toast.LENGTH_SHORT).show();
+                                            if (i > 10){
+                                                i = 1 ;
+                                            }
+                                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                                                NotificationChannel notificationChannel = new NotificationChannel("MyLuanNoti"
+                                                        ,"MyLuanNoti", NotificationManager.IMPORTANCE_HIGH) ;
+                                                NotificationManager manager = getActivity().getSystemService(NotificationManager.class) ;
+                                                manager.createNotificationChannel(notificationChannel);
+                                            }
+                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),"MyLuanNoti") ;
+                                            builder.setContentTitle("Order #"+order.getOrderNo() + "is submitted.") ;
+                                            builder.setContentText("Your order will pick up at " + order.getPickUpDate() +" " + order.getPickUpTime()) ;
+                                            builder.setSmallIcon(R.drawable.pickup_ic) ;
+                                            builder.setAutoCancel(true) ;
+                                            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getActivity()) ;
+                                            managerCompat.notify(i,builder.build());
+                                            i++ ;
                                         }
                                     });
                                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {

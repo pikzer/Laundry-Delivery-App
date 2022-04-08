@@ -70,7 +70,7 @@
             app:layout_constraintTop_toBottomOf="@+id/makeBookBtn" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/serviceInfoBtn"
             android:layout_width="115dp"
             android:layout_height="112dp"
             android:layout_marginStart="72dp"
@@ -88,10 +88,10 @@
             android:layout_marginTop="8dp"
 
             android:text="Service Info"
-            app:layout_constraintEnd_toEndOf="@+id/imageButton2"
+            app:layout_constraintEnd_toEndOf="@+id/serviceInfoBtn"
             app:layout_constraintHorizontal_bias="0.536"
-            app:layout_constraintStart_toStartOf="@+id/imageButton2"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+            app:layout_constraintStart_toStartOf="@+id/serviceInfoBtn"
+            app:layout_constraintTop_toBottomOf="@+id/serviceInfoBtn" />
 
         <ImageButton
             android:id="@+id/contactUsBtn"
@@ -104,7 +104,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_contacts_24"
             app:layout_constraintStart_toEndOf="@+id/makeBookBtn"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+            app:layout_constraintTop_toBottomOf="@+id/serviceInfoBtn" />
 
         <TextView
             android:id="@+id/textView46"
@@ -115,6 +115,27 @@
             app:layout_constraintEnd_toEndOf="@+id/contactUsBtn"
             app:layout_constraintStart_toStartOf="@+id/contactUsBtn"
             app:layout_constraintTop_toBottomOf="@+id/contactUsBtn" />
+
+        <ImageButton
+            android:id="@+id/allbookingBtn"
+            android:layout_width="115dp"
+            android:layout_height="112dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/round_botton"
+            android:scaleType="fitXY"
+            android:src="@drawable/book_ic"
+            app:layout_constraintStart_toStartOf="@+id/makeBookBtn"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <TextView
+            android:id="@+id/textView48"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="All Booking"
+            app:layout_constraintEnd_toEndOf="@+id/allbookingBtn"
+            app:layout_constraintStart_toStartOf="@+id/allbookingBtn"
+            app:layout_constraintTop_toBottomOf="@+id/allbookingBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

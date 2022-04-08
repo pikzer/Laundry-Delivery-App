@@ -1,12 +1,18 @@
 package com.example.project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -18,7 +24,9 @@ import com.example.project.fragment.AccountFragment;
 import com.example.project.fragment.BookingFragment;
 import com.example.project.fragment.HomeFragment;
 import com.example.project.fragment.SettingFragment;
+import com.example.project.model.OrderRecycle;
 import com.example.project.model.User;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,9 +52,13 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater()) ;
         setContentView(binding.getRoot());
         getSupportActionBar().hide();
+
         // get current user
         preferences  = getSharedPreferences("CurrentUser",MODE_PRIVATE) ;
         userKey = preferences.getString("CurrentUser","") ;
+
+
+
         // init database
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference("User");
@@ -67,7 +80,12 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
                 case R.id.home_nav:
-                    replaceFragment(new HomeFragment());
+//                    replaceFragment(new HomeFragment());
+                    Bundle bb = new Bundle() ;
+                    bb.putString("currentuser",userObj.getPhone());
+                    HomeFragment homeFragment = new HomeFragment() ;
+                    homeFragment.setArguments(bb);
+                    replaceFragment(homeFragment);
                     break;
                 case R.id.booking_nav:
                     Bundle bundle = new Bundle() ;
@@ -92,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true ;
         });
+        notificationPush();
     }
 
     public void replaceFragment(Fragment fragment){
@@ -99,5 +118,121 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout,fragment) ;
         fragmentTransaction.commit();
+    }
+
+    public void notificationPush(){
+        FirebaseDatabase db ;
+        DatabaseReference ref ;
+        db = FirebaseDatabase.getInstance();
+        ref = db.getReference("Order");
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Log.i("xxx", Objects.requireNonNull(snapshot.getValue()).toString() );
+//                Log.i("xxx",previousChildName) ;
+                if(snapshot.child("userKey").getValue().toString().equals(userObj.getPhone())){
+                    if(snapshot.child("status").getValue().toString().equals("pick up")){
+                        notification("Update Order #"+ snapshot.child("orderNo").getValue().toString(),
+                                "Your order going to " + snapshot.child("status").getValue().toString() +" at " +
+                                        snapshot.child("pickUpDate").getValue().toString() + " " +
+                                        snapshot.child("pickUpTime").getValue().toString()
+                                ,R.drawable.pickup_ic);
+                    }
+                    else if(snapshot.child("status").getValue().toString().equals("in progress")){
+                        notification("Update Order #"+ snapshot.child("orderNo").getValue().toString(),
+                                "Your order is " + snapshot.child("status").getValue().toString() + " now."
+                                ,R.drawable.inprogress_ic);
+                    }
+                    else if(snapshot.child("status").getValue().toString().equals("drop off")){
+                        notification("Update Order #"+ snapshot.child("orderNo").getValue().toString(),
+                                "Your order going to " + snapshot.child("status").getValue().toString() +" at " +
+                                        snapshot.child("dropOffDate").getValue().toString() + " " +
+                                        snapshot.child("dropOffTime").getValue().toString()
+                                ,R.drawable.dropoff_ic);
+                    }
+                    else if(snapshot.child("status").getValue().toString().equals("Canceled")){
+                        notification("Update Order #"+ snapshot.child("orderNo").getValue().toString(),
+                                "Your order is Canceled"
+                                ,R.drawable.ic_baseline_cancel_24);
+                    }
+                    else if(snapshot.child("status").getValue().toString().equals("done")){
+                        notification("Update Order #"+ snapshot.child("orderNo").getValue().toString(),
+                                "Your order is successfully drop off."
+                                ,R.drawable.done_ic);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+//        ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                ArrayList<String> c = new ArrayList<>() ;
+//                ArrayList<OrderRecycle> o = new ArrayList<>() ;
+//                int i = 0 ;
+//                for (DataSnapshot s:snapshot.getChildren()) {
+//                    if(!s.child("userKey").getValue().toString().equals(userObj.getPhone())){
+//                        continue;
+//                    }
+//                    for (DataSnapshot a :s.getChildren()){
+//                        c.add(a.getValue().toString()) ;
+//                    }
+//                    String time="" ;
+//                    if(c.get(8+i).equals("pick up")){
+//                        time = c.get(4+i) + " " + c.get(5+i) ;
+//                    }
+//                    else{
+//                        time = c.get(0+i) + " " + c.get(1+i) ;
+//                    }
+//                    o.add(new OrderRecycle("#"+c.get(3+i),c.get(7+i),c.get(8+i
+//                    ), time, c.get(8+i), 0));
+//                    i+=10 ;
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+    }
+    int i = 0 ;
+    public void notification(String title,String text,int icon){
+        if (i > 10){
+            i = 1 ;
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel = new NotificationChannel("MyLuanNoti"
+                    ,"MyLuanNoti", NotificationManager.IMPORTANCE_HIGH) ;
+            NotificationManager manager = getSystemService(NotificationManager.class) ;
+            manager.createNotificationChannel(notificationChannel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"MyLuanNoti") ;
+        builder.setContentTitle(title) ;
+        builder.setContentText(text) ;
+        builder.setSmallIcon(icon) ;
+        builder.setAutoCancel(true) ;
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this) ;
+        managerCompat.notify(i,builder.build());
+        i++ ;
     }
 }

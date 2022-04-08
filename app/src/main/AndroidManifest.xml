@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project">
         <activity
+            android:name=".ServiceInfoActivity"
+            android:exported="false"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/Theme.Project.NoActionBar" />
+        <activity
             android:name=".OrderCustomerInfo"
             android:exported="false" />
         <activity

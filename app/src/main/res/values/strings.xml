@@ -5,4 +5,60 @@
     <string name="username">user_name</string>
     <string name="userTel">user_phone</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_scrolling">Service Information</string>
+    <string name="large_text">
+        "\n\nWe provide a laundry service in Bangkok You can rely on.\n\n"
+
+        "   My Laundry is on an demand provider of a professional laundry service in Bangkok."
+        "  Order service via our smart phone for Android available on Google Play Store.\n"
+        "   Get all your clothes sparkling clean simply by tapping our My Laundry App."
+        "   We offer high quality, on-demand Professional Laundry Service Bangkok delivered right to your door.\n"
+        "   Now you can relax and get on with your busy day knowing your laundry is being well taken care of by professionals. Unlike many other laundry services, we provide a laundry service in Bangkok where you have the option of simply leaving your laundry at your security desk, or we can pick it up at your door.\n"
+        "   You also never have to worry about folding or ironing your laundry when you use our laundry services. We’ll take care of that chore for you as well. We are here to make your laundry chores much less of a headache.\n\n"
+
+        "Service Detail\n\n"
+
+        "Full-Service\n\n"
+
+        "   Full-Service is a service you can purchase where your clothes are washed, dried, ironing and either folded or hung on hangers.You can either drop off laundry or schedule for it to be picked up from your home, business, or dorm.\n\n"
+        "Full-Service fee is\n\n"
+        "Dexter 20 lb Washer (4 Total)-----------------------------$2.50\n"
+        "Dexter 30 lb Washer (8 Total)-----------------------------$3.50\n"
+        "Dexter 40 lb Washer (8 Total)-----------------------------$4.75\n"
+        "Dexter 60 lb Washer (4 Total)-----------------------------$6.75\n"
+        "30 lb Dryer (28 Total)-------------------------------$0.25 For 8 Min\n\n"
+
+
+        "Wash &amp; fold Service\n\n"
+
+        "Wash &amp; fold is We use Arm &amp; Hammer with Oxiclean or Ariel Detergent, and use a commercial brand of softener. Erica’s also uses Bounce dryer sheets, Oxiclean, and bleach when requested. Our drop off laundry will fold your clothing or hang them on hangers, whichever you prefer. Either bring in your hangers or we will provide them for $0.10 each.\n\n"
+
+        "Wash &amp; fold service fee is $1.50/Pound\n"
+        "**Weight minimum is 15 Pound.\n\n"
+
+        "Wash &amp; iron Service\n\n"
+        "We offer a wide range of cleaning services from laundry, wash &amp; iron to professional ironing services, you can also contact us 24 hours a day. Our team of experts will use exceptional care when ironing your favorite clothes. Ironing some particular types of fabrics requires special care and attention so they last longer.\n\n"
+        "Wash &amp; iron service fee is start from $3.00/Pound However, our cost per piece varies by the quantity and type of fabric. We also provide an ironing package where you can save quite a bit of money. The price per piece is only $0.20\n"
+        "Shirts, Pants/Skirts-----------------------------$3.00/Pound\n"
+        "Dresses-----------------------------------------------$5.00/Pound\n\n"
+
+        "Dry cleaning Service\n\n"
+        "Dry cleaning is The dry cleaning process cleans clothes with chemical solvents instead of water and detergent. One of the most common dry-cleaning chemicals is tetrachloroethylene or perchloroethylene\n\n"
+        "Dry cleaning service fee is The cost depends on the type of garment you want dry cleaned. You’ll also pay more if you want additional services like clothing alterations, repair, and special treatment.\n"
+        "Shirts, Pants, Sweeter, Tie start from----------------$5/Piece\n"
+        "Coat, Dress, Suit start from----------------------------$10/Piece\n"
+        "Comforter/Blanker start from--------------------------$20/Piece\n"
+        "Wedding Dress start from------------------------------$100/Piece\n\n"
+
+        "Steam Iron Service\n\n"
+        "Steam Iron is uses superheated water to eliminate wrinkles in clothes and fabrics which may not be suitable for traditional dry ironing. Distilled water is usually poured into a holding tank and special heating elements convert it to steam.\n\n"
+        "Stream Iron service fee is cost per piece varies by the quantity and type of fabric. Start at 1.00$/piece\n"
+        "Shirts, Pants, Sweeter, Tie start from-----------$1.25/Piece\n"
+        "Coat, Dress, Suit start from-----------------------$2/Piece\n\n"
+
+        "Duvet Cleaning\n\n"
+        "Duvet Cleaning start at $20/Pound"
+
+    </string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -123,7 +123,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     String.valueOf(currentLocation.longitude)});
                     mRef.setValue(currentLocation) ;
                     finish();
-
                 }
                 else {
                     Log.i("xxx","Not pin") ;
