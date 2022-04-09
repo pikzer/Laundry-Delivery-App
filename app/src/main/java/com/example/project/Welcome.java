@@ -2,6 +2,7 @@ package com.example.project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,9 +23,10 @@ public class Welcome extends AppCompatActivity {
         getSupportActionBar().hide();
         hLoginBtn = findViewById(R.id.hLoginBtn) ;
         hSignupBtn = findViewById(R.id.hSignupBtn) ;
-
         SharedPreferences sharedPreferencesLoginStatus =
                 getSharedPreferences("isLogin", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("NotificationMode",
+                Context.MODE_PRIVATE);
         String isLogin =  sharedPreferencesLoginStatus.getString("isLogin","") ;
         if(isLogin.equals("true")){
             Intent mainActivity = new Intent(Welcome.this,MainActivity.class) ;
@@ -36,6 +38,10 @@ public class Welcome extends AppCompatActivity {
             startActivity(dashboard);
             finish();
         }
+        SharedPreferences.Editor editor1 = preferences.edit() ;
+        editor1.putString("NotificationMode","true") ;
+        MainActivity.noti = true ;
+        editor1.apply();
 
 
         hLoginBtn.setOnClickListener(new View.OnClickListener() {

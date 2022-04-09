@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ public class OrderCustomerInfo extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference mRef;
+    String orderNo ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class OrderCustomerInfo extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference("Order");
         Bundle extra = getIntent().getExtras();
+        orderNo = extra.getString("orderKey123") ;
 
         pickupImg = findViewById(R.id.pickupImg);
         inprogressImg = findViewById(R.id.inprogressImg);
@@ -64,11 +67,16 @@ public class OrderCustomerInfo extends AppCompatActivity {
 
         if (extra != null) {
             mRef.addValueEventListener(new ValueEventListener() {
-                String orderNo = extra.getString("orderKey");
-                String o = orderNo.substring(1);
-
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String o ;
+                    if(orderNo.length() ==5){
+                        o = orderNo ;
+                    }
+                    else {
+                        o = orderNo.substring(1) ;
+                    }
+                    Log.i("xxx",o) ;
                     DataSnapshot snapshot1 = snapshot.child(o);
                     ArrayList<String> tempOrder = new ArrayList<>();
                     for (DataSnapshot s : snapshot1.getChildren()) {
@@ -198,6 +206,12 @@ public class OrderCustomerInfo extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    @Override
+    public void onBackPressed() {
+        Intent home = new Intent(this,MainActivity.class) ;
+        startActivity(home);
+        super.onBackPressed();
     }
 }

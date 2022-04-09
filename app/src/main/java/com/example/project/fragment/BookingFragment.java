@@ -48,15 +48,8 @@ public class BookingFragment extends Fragment implements Adapter.OnNoteListener 
     public BookingFragment() {
         // Required empty public constructor
     }
+
     ArrayList<OrderRecycle> orderRecycleArrayList ;
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BookingFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static BookingFragment newInstance(String param1, String param2) {
         BookingFragment fragment = new BookingFragment();
@@ -69,6 +62,7 @@ public class BookingFragment extends Fragment implements Adapter.OnNoteListener 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+//        getActivity().setContentView(R.layout.fragment_booking);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -94,10 +88,7 @@ public class BookingFragment extends Fragment implements Adapter.OnNoteListener 
         if(bundle != null){
             currentUser = bundle.getString("currentuser");
         }
-
-//        Log.i("xxx",currentUser) ;
         return view ;
-
     }
 
     public void initData(){
@@ -174,18 +165,13 @@ public class BookingFragment extends Fragment implements Adapter.OnNoteListener 
     }
 
 
-//    public ArrayList<OrderRecycle> sortByDate(ArrayList<OrderRecycle> orderRecycleList){
-//
-//    }
-
 
 
 
     @Override
     public void onNoteClick(int pos) {
         Intent orderDashBoard = new Intent(getActivity(), com.example.project.OrderCustomerInfo.class);
-        orderDashBoard.putExtra("orderKey",orderRecycleArrayList.get(pos).getOrderNumTV()) ;
-        Log.i("xxx",orderRecycleArrayList.get(pos).getOrderNumTV());
+        orderDashBoard.putExtra("orderKey123",orderRecycleArrayList.get(pos).getOrderNumTV()) ;
         startActivity(orderDashBoard);
     }
 }

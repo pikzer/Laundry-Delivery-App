@@ -35,8 +35,6 @@ public class ServiceInfoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 Intent lineIntent  = new Intent(Intent.ACTION_VIEW, Uri.parse("http://line.me/ti/p/~kajitich"));
                 startActivity(lineIntent);
             }

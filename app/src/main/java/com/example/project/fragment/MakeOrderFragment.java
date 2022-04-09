@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +37,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.project.MapsActivity;
+import com.example.project.OrderCustomerInfo;
 import com.example.project.R;
 import com.example.project.model.Order;
 import com.google.android.gms.maps.model.LatLng;
@@ -46,6 +48,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -211,14 +214,22 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String time = hourOfDay+":"+minute ;
+                Calendar c = Calendar.getInstance(Locale.getDefault());
+//                SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm");
                 DateFormat dateFormat = new SimpleDateFormat("HH:mm") ;
                 DateFormat outFormat = new SimpleDateFormat( "HH:mm");
                 try {
                     Date date = dateFormat.parse(time) ;
+                    String current = dateFormat.format(c.getTime()) ;
+                    Date date1 = dateFormat.parse(current) ;
+//                    Date currentTime = Calendar.getInstance(Locale.getDefault());
                     if(date != null){
                         // service start from 8:00 -> 19:00)
                         if(hourOfDay >= 8 && hourOfDay <= 19){
-                            if(hourOfDay == 19 && minute == 0){
+                            if(date.before(date1)){
+                                Toast.makeText(getActivity(),"Please select correct time.",Toast.LENGTH_SHORT).show();
+                            }
+                            else if(hourOfDay == 19 && minute == 0){
                                 time = outFormat.format(date) ;
                                 pickUpTimeEdt.setText(time);
                             }
@@ -244,8 +255,9 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String time = hourOfDay+":"+minute ;
-                DateFormat dateFormat = new SimpleDateFormat("HH:mm") ;
-                DateFormat outFormat = new SimpleDateFormat( "HH:mm");
+                String pattern = "HH:mm" ;
+                DateFormat dateFormat = new SimpleDateFormat(pattern) ;
+                DateFormat outFormat = new SimpleDateFormat(pattern);
                 try {
                     Date date = dateFormat.parse(time) ;
                     if(date != null){
@@ -406,24 +418,29 @@ public class MakeOrderFragment extends Fragment  implements DatePickerDialog.OnD
                                             bookingFragment.setArguments(bundle);
                                             replaceFragment(bookingFragment);
                                             getActivity().getFragmentManager().popBackStack();
-                                            Toast.makeText(getActivity(), "Your order has been add", Toast.LENGTH_SHORT).show();
-                                            if (i > 10){
-                                                i = 1 ;
-                                            }
-                                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                                                NotificationChannel notificationChannel = new NotificationChannel("MyLuanNoti"
-                                                        ,"MyLuanNoti", NotificationManager.IMPORTANCE_HIGH) ;
-                                                NotificationManager manager = getActivity().getSystemService(NotificationManager.class) ;
-                                                manager.createNotificationChannel(notificationChannel);
-                                            }
-                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),"MyLuanNoti") ;
-                                            builder.setContentTitle("Order #"+order.getOrderNo() + "is submitted.") ;
-                                            builder.setContentText("Your order will pick up at " + order.getPickUpDate() +" " + order.getPickUpTime()) ;
-                                            builder.setSmallIcon(R.drawable.pickup_ic) ;
-                                            builder.setAutoCancel(true) ;
-                                            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getActivity()) ;
-                                            managerCompat.notify(i,builder.build());
-                                            i++ ;
+                                            Toast.makeText(getActivity(), "Your order has been add", Toast.LENGTH_LONG).show();
+//                                            if (i > 10){
+//                                                i = 1 ;
+//                                            }
+//                                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+//                                                NotificationChannel notificationChannel = new NotificationChannel("MyLuanNoti"
+//                                                        ,"MyLuanNoti", NotificationManager.IMPORTANCE_HIGH) ;
+//                                                NotificationManager manager = getActivity().getSystemService(NotificationManager.class) ;
+//                                                manager.createNotificationChannel(notificationChannel);
+//                                            }
+//                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),"MyLuanNoti") ;
+//                                            builder.setContentTitle("Order #"+order.getOrderNo() + "is submitted.") ;
+//                                            builder.setContentText("Your order will pick up at " + order.getPickUpDate() +" " + order.getPickUpTime()) ;
+//                                            builder.setSmallIcon(R.drawable.pickup_ic) ;
+//                                            builder.setAutoCancel(true) ;
+//                                            Intent intent = new Intent(getActivity(), OrderCustomerInfo.class);
+//                                            intent.putExtra("orderKey",order.getOrderNo()) ;
+//                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                            PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+//                                            builder.setContentIntent(pendingIntent) ;
+//                                            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getActivity()) ;
+//                                            managerCompat.notify(i,builder.build());
+//                                            i++ ;
                                         }
                                     });
                                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {

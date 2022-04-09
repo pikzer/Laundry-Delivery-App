@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment  {
         contactBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent lineIntent  = new Intent(Intent.ACTION_VIEW, Uri.parse("http://line.me/ti/p/~kajitich"));
+                Intent lineIntent  = new Intent(Intent.ACTION_VIEW, Uri.parse("http://line.me/ti/p/~oak_rujipas"));
                 startActivity(lineIntent);
             }
         });

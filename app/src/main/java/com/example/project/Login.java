@@ -82,7 +82,7 @@ public class Login extends AppCompatActivity {
                             SharedPreferences.Editor editor2 = preferences2.edit() ;
                             hideKeyboardFrom(Login.this,v);
 
-                            if(ph.equals("12") && pas.equals("admin")){
+                            if(ph.equals("1234") && pas.equals("admin")){
                                 editor1.putString("isLogin","adminMode");
                                 editor1.apply();
                                 editor2.putString("CurrentUser",Common.currentUser.getPhone()) ;
